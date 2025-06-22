@@ -3,7 +3,21 @@ import fs from "fs";
 
 
 cloudinary.config({
-    cloud_name:'do0kmajvs',
-    api_key:'453833769838374',
-    api_secret:'V9DsOYGlx6DolFVqXnSwp40EJ1w'
+    cloud_name:process.env.CLOUDINARY_CLOUD_NAME,
+    api_key:process.env.CLOUDINARY_API_KEY,
+    api_secret:process.env.CLOUDINARY_API_SECRET,
 })
+const uploadFileCloudinary=async (filePath)=>{
+    try{
+        if(!filePath) return null;
+        const response=await cloudinary.uploader.upload(filePath,{
+            resource_type:"auto",
+        })
+        console.log("File uploaded to cloudinary")
+        return response;
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+export{ uploadFileCloudinary }
