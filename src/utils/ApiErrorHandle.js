@@ -15,4 +15,4 @@ class ApiErrorHandle extends Error{
 
 }
 
-export default ApiErrorHandle;
+export  {ApiErrorHandle};
