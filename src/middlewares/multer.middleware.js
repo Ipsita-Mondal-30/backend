@@ -1,6 +1,6 @@
 import multer from 'multer';
 import fs from 'fs';
-const uploadPath = '/tmp/my-uploads';
+const uploadPath = 'public/tmp/my-uploads';
 
 // Ensure upload directory exists
 if (!fs.existsSync(uploadPath)) {
