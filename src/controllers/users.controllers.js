@@ -220,7 +220,7 @@ const UpdateAccountDetail=asyncHandler(async(req,res)=>{
                 fullName,
                 email
             }
-        },
+        }.select("-password -refreshToken"),
         {
             new:true
         }
