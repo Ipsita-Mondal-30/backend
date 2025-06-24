@@ -1,0 +1,24 @@
+import { ApiErrorHandle
+ } from "../utils/ApiErrorHandle";
+ import {jwtVerify} from "../utils/jwt.js"
+ import {User} from "../models/user.model.js"
+ import { asyncHandler } from "../utils/asynchandler";
+
+ export const verifyJWT=asyncHandler(async(req,res,next)=>{
+    try{
+        const accessToken=req.cookies.accessToken || req.header("Authorization")?.replace("Bearer ","")
+        if(!accessToken){
+            throw new ApiErrorHandle(400,"Unauthorized Request")
+        }
+        const decodedToken=jwtVerify(accessToken)
+        const user=await User.findById(decodedToken._id).select("-password -refreshToken")
+        if(!user){
+            throw new ApiErrorHandle(404,"Invalid Request")
+        }
+        req.user=user
+        next()
+    }
+    catch(error){
+        throw new ApiErrorHandle(400,error?.message || "Invalid Request")
+    }
+ })
