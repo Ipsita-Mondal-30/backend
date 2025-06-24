@@ -29,8 +29,14 @@ const registerUser = asyncHandler(async (req, res) => {
     //check for user creation 
     //return res 
 
-    const {fullName,email,password,username}=req.body
+    const fullName = req.body.fullName?.trim();
+const email = req.body.email?.trim();
+const username = req.body.username?.trim();
+const password = req.body["password "]?.trim();
     console.log("email",email);
+    console.log("username",username);
+    console.log("password",password);
+    console.log("fullName",fullName);
 
     if([fullName,email,password,username].some((field)=> field?.trim() === "" )){
         throw new ApiErrorHandle(400,"All fields are required")
@@ -43,6 +49,7 @@ const registerUser = asyncHandler(async (req, res) => {
       const existedUser = await User.findOne({
         $or: [{ email }, { username }]
       });
+      console.log("BODY:", req.body);
       
     if(existedUser){
         throw new ApiErrorHandle(409,"User with email or username already exists")
@@ -84,6 +91,8 @@ console.log("username:", username);
    return res.status(201).json(
     new ApiResponse(201,createdUser,"User registered Successfully")
    )
+
+
    
 
   
@@ -106,7 +115,8 @@ const loginUser= asyncHandler(async(req,res)=>{
      if(!foundUser){
         throw new ApiErrorHandle(404,"user does not exists")
      }
-     const isPasswordValid=await user.isPasswordCorrect(password);
+     const isPasswordValid = await foundUser.isPasswordCorrect(password);
+
      if(!isPasswordValid){
         throw new ApiErrorHandle(400,"password is not valid")
      }
